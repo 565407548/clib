@@ -16,22 +16,23 @@ int node_compare(const TID t1,const TID t2){
 int main(int argc, char *argv[])
 {
   int i,t1,t2,capacity;
-
+  struct disjointSet ds;
+  
   scanf("%d",&capacity);
   
-  initSet(capacity,getNodeID,node_compare);
+  initSet(&ds,capacity,getNodeID,node_compare);
   for(i=0;i<capacity;i++){
     T node;
     scanf("%d%s",&node.id,node.desc);
-    newSet(node);
+    newSet(&ds,node);
   }
 
   while(scanf("%d%d",&t1,&t2)==2 && t1>0 && t2>0){
-    unionSet(t1,t2);
+    unionSet(&ds,t1,t2);
   }
 
-  findSetNode(t1);
-  sameSet(1,6);
+  findSetNode(&ds,t1);
+  sameSet(&ds,1,6);
   
   return 0;
 }

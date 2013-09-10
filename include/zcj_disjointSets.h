@@ -41,15 +41,24 @@ struct ds_head{
   struct ds_node *node;
 };
 
-void initSet(int capcity,TID (*getNodeID)(T t),int (*node_compare)(const TID, const TID));
+struct disjointSet{
+   int capacity;
+   int len;
+   struct ds_head *heads;
+   struct ds_node **tails;
+   int (*node_compare)(const TID , const TID);
+   TID (*getNodeID)(T t);
+};
+
+void initSet(struct disjointSet *ds,int capcity,TID (*getNodeID)(T t),int (*node_compare)(const TID, const TID));
 //根据指定节点创建一个新不交集，返回不交集的标识（区别于节点标识）
-int newSet(T t);
-struct ds_node *findSetNode(TID tid);
-int sameSet(TID tid1,TID tid2);
-int unionSet(TID tid1,TID tid2);
+int newSet(struct disjointSet *ds,T t);
+struct ds_node *findSetNode(struct disjointSet *ds,TID tid);
+int sameSet(struct disjointSet *ds,TID tid1,TID tid2);
+int unionSet(struct disjointSet *ds,TID tid1,TID tid2);
 int default_node_compare(const TID t1,const TID t2);
 
-void releaseSets();
+void releaseSets(struct disjointSet *ds);
 
 #endif /* _ZCJ_DISJOINTSETS_H_ */
 
