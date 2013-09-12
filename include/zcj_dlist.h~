@@ -1,0 +1,13 @@
+#ifndef _ZCJ_DLIST_H_
+#define _ZCJ_DLIST_H_
+
+#define TDL int
+
+struct dlistNode{
+  TDL value;
+  struct dlistNode *pre;
+  struct dlistNode *next;
+}
+
+
+#endif /* _ZCJ_DLIST_H_ */

@@ -1,0 +1,68 @@
+#include<stdlib.h>
+
+#include"zcj_list.h"
+
+void initList(struct list *l){
+  l->head=NULL;
+  l->tail=NULL;
+}
+
+int insertListNode(struct list *l,TL t){
+  struct listNode *pnode=(struct listNode*)malloc(sizeof(struct listNode));
+  if(pnode==NULL){
+    return 0;
+  }
+  pnode->value=t;
+  pnode->next=NULL;
+
+  if(l->head==NULL){
+    l->head=pnode;
+    l->tail=pnode;
+  }
+  else{
+    p->tail->next=pnode;
+    p->tail=p->tail->next;
+  }
+  return 1;
+}
+
+int deleteListNode(struct list *l,TL t){
+  int dc=0;//统计删除节点的个数
+  struct listNode *node,*prenode,dnode;
+  node=l->head;
+  prenode=NULL;
+  
+  while(node!=NULL){
+    if(pnode->value == t){
+      if(prenode==NULL){
+        l->head=node->next;
+      }else{
+        prenode->next=node->next;
+      }
+      dnode=node;
+      node=node->next;
+      
+      free(dnode);
+      ++dc;
+    }
+    else{
+      prenode=node;
+      node=node->next;
+    }
+  }
+  return dc;
+}
+
+void releaseList(struct list *l){
+  struct listNode *pnode1,*pnode2;
+
+  pnode1=l->head;
+  while(pnode1){
+    pnode2=pnode1->next;
+
+    free(pnode1);
+    pnode1=pnode2;
+  }
+  l->head=NULL;
+  l->tail=NULL;
+}
