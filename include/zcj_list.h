@@ -1,16 +1,26 @@
 #ifndef _ZCJ_LIST_H_
 #define _ZCJ_LIST_H_
 
+//double list
+//#define DLIST
+//circular list
+#define CLIST
+
 #define TL int
 
 struct listNode{
   TL value;
   struct listNode *next;
+#if defined(DLIST) || defined(CLIST)
+  struct listNode *pre;
+#endif
 };
 
 struct list{
   struct listNode *head;
+#ifndef CLIST
   struct listNode *tail;
+#endif
 };
 
 void initList(struct list *l);
