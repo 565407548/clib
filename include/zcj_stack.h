@@ -1,19 +1,21 @@
 #ifndef _ZCJ_STACK_H_
 #define _ZCJ_STACK_H_
 
-#define T int
+#define TS struct treeNode *
 
-struct stack
-{
-  T *elem;
-  int capacity;
-  int index;
+struct stackNode{
+  TS elem;
+  struct stackNode *next;
 };
 
-void initStack(struct stack *s,int capacity);
-int top(struct stack *s,T *t);
-T pop(struct stack *s, T *t);
-int push(struct stack *s,T t);
+struct stack{
+  struct stackNode *top;
+};
+
+void initStack(struct stack *s);
+int top(struct stack *s,TS *t);
+int pop(struct stack *s, TS *t);
+int push(struct stack *s,TS t);
 void releaseStack(struct stack *s);
 
 #endif /* _ZCJ_STACK_H_ */

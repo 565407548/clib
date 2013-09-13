@@ -4,11 +4,12 @@
 
 int main(int argc, char *argv[])
 {
+  /*
   int i,op,capacity,t;
   struct stack s;
   
   scanf("%d",&capacity);
-  initStack(&s,capacity);
+  initStack(&s);
 
   while(scanf("%d",&op)==1 && op!=0){
     switch(op){
@@ -41,6 +42,6 @@ int main(int argc, char *argv[])
   }
 
   releaseStack(&s);
-  
+  */
   return 0;
 }

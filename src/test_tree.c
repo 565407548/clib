@@ -26,10 +26,19 @@ int main(int argc, char *argv[])
         printf("\n");
         break;
       case 3://pre order traversal
+        printf("depth preorder:");
+        depthFirstTraversal(&at,PREORDER);
+        printf("\n");
         break;
       case 4://in order traversal
+        printf("depth inorder:");
+        depthFirstTraversal(&at,INORDER);
+        printf("\n");
         break;
       case 5://post order traversal
+        printf("depth postorder:");
+        depthFirstTraversal(&at,POSTORDER);
+        printf("\n");
         break;
       default:
         printf("error operator\n");

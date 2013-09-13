@@ -2,43 +2,44 @@
 
 #include "zcj_stack.h"
 
-void initStack(struct stack *s,int capacity){
-  s->elem=(T*)malloc(sizeof(T)*capacity);
-  if(s->elem==NULL){
-    perror("内存空间不够，无法给栈分配内存空间");
-    capacity=0;
-  }
-  s->capacity=capacity;
-  s->index=s->capacity;
+void initStack(struct stack *s){
+  s->top=NULL;
 }
 
-int top(struct stack *s,T *t){
-  if(s->index>=0 && s->index<s->capacity){
-    *t=s->elem[s->index];
+int top(struct stack *s,TS *t){
+  if(s->top!=NULL){
+    if(t!=NULL)
+      *t=s->top->elem;
     return 1;
   }
   return 0;
 }
 
-int pop(struct stack *s,T *t){
+int pop(struct stack *s,TS *t){
+  struct stackNode *sn;
   if(top(s,t)){
-    s->index++;
+    sn=s->top;
+    s->top=s->top->next;
+
+    free(sn);
     return 1;
   }
   return 0;
 }
 
-int push(struct stack *s,T t){
-  if(s->index>0){
-    s->index--;
-    s->elem[s->index]=t;
-    return 1;
+int push(struct stack *s,TS t){
+  struct stackNode *sn=(struct stackNode*)malloc(sizeof(struct stackNode));
+
+  if(sn==NULL){
+    return 0;
   }
-  return 0;
+  sn->elem=t;
+  sn->next=s->top;
+  s->top=sn;
+  
+  return 1;
 }
 
 void releaseStack(struct stack *s){
-  if(s->elem){
-    free(s->elem);
-  }
+  while(pop(s,NULL));
 }
