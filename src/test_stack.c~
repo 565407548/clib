@@ -1,0 +1,46 @@
+#include<stdio.h>
+
+#include"zcj_stack.h"
+
+int main(int argc, char *argv[])
+{
+  int i,op,capacity,t;
+  struct stack s;
+  
+  scanf("%d",&capacity);
+  initSet(&s,capacity);
+
+  while(scanf("%d",&op) && op!=0){
+    switch(op){
+      case 1://top
+        if(top(&s,&t)){
+          printf("top:%d\n",t);
+        }
+        else{
+          printf("%s\n","no elem\n");
+        }
+        break;
+      case 2://pop
+        if(pop(&s,&t)){
+          printf("pop:%d\n",t);
+        }else{
+          printf("%s\n","no elem,can't pop\n");
+        }
+        break;
+      case 3://push
+        scanf("%d",&t);
+        if(push(&s,t)){
+          printf("push:%d\n",t);
+        }else{
+          printf("%s\n","no capacity for push\n");
+        }
+        break;
+      default:
+        perror("error operator\n");
+    }
+  }
+
+  releaseStack(&s);
+  
+  return 0;
+}

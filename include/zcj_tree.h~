@@ -1,0 +1,18 @@
+#ifndef _ZCJ_TREE_H_
+#define _ZCJ_TREE_H_
+
+#define T int
+
+struct node{
+  T value;
+  struct node * left;
+  struct node *right;
+};
+
+void initTree(struct node *root);
+struct node *fineNode(struct node *root,T v);
+int insertNode(struct node *root,T parent,T child);
+
+#endif /* _ZCJ_TREE_H_ */
+
+

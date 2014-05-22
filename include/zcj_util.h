@@ -10,7 +10,7 @@
 int Char2Int(u8 c);
 u8 Int2Char(int val);
 int Str2Int(int *result,const u8 *str);
-u8* Int2Str(u8 *str,const int i);
+char* Int2Str(char *str,int i);
 u8* Char2Hexs(u8 *str,const u8 value);
 u8 Hexs2Char(u8 *value,const u8 *str);
 u8 *Float2Str(u8 *str,const float f,const int precise);
@@ -41,7 +41,7 @@ u8* StringReverse(u8 *str);
 char* Char2Ints(char *des,char c);
 char Ints2Char(const char *src);
 char* ExtendFloatStr(char *dest,const char *src,int int_len,int frac_len);
-void TrimInts(char *dest);
+void TrimInt(char *dest);
 void TrimFloat(char *dest);
 void Delay(int sec);
 

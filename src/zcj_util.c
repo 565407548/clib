@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "zcj_const.h"
-#include "zcj_type.h"
-#include "zcj_util.h"
+#include "../include/zcj_const.h"
+#include "../include/zcj_type.h"
+#include "../include/zcj_util.h"
 
 static char upper_digits[]="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static char lower_digits[]="0123456789abcdefghijklmnopqrstuvwxyz";
@@ -52,7 +52,7 @@ int Str2Int(int *result,const u8 *str){
   返回值：
   转化成字符串的首地址
 */
-u8* Int2Str(u8 *str,const int value){
+char* Int2Str(char *str,int value){
     int v=value;
     u8 *p=str;
 
@@ -523,7 +523,7 @@ char* ExtendFloatStr(char *dest,const char *src,int int_len,int frac_len){
   dest:整数字符串
   返回值：
 */
-void TrimInts(char *dest){
+void TrimInt(char *dest){
     int index,st;
 
     for(index=0;index<strlen(dest)-1;index++){
@@ -551,7 +551,7 @@ void TrimFloat(char *dest){
     int index,st,end;
 
     if(strchr(dest,'.')==NULL){
-	trimInt(dest);
+	TrimInt(dest);
     }else{
 	st=0;
 	for(index=0;index<strlen(dest);index++){

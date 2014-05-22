@@ -1,0 +1,227 @@
+#include<stdlib.h>
+
+#include"zcj_graph.h"
+
+static struct GraphVertexNode *getGraphVertexNode(struct Graph *g,TG id);
+
+void initGraph(struct Graph *g){
+  g->head=NULL;
+}
+
+int addVertex(struct Graph *g,TG id){
+  struct GraphVertexNode *gVertex;
+  struct Vertex vertex;
+  
+  if((vertex=getGraphVertex(g,id))!=NULL){
+    return 1;
+  }
+  
+  vertex=(struct Vertex*)malloc(sizeof(struct Vertex));
+  if(vertex==NULL){
+    return 0;
+  }
+  vertex->id=id;
+
+  gVertex=(struct GraphVertexNode *)malloc(sizeof(struct GraphVertexNode));
+  if(gVertex==NULL){
+    return 0;
+  }
+  gVertex->vertex=vertex;
+  gVertex->edge=NULL;
+  gVertex->nextGVertex=g->head;
+  g->head=gVertex;
+
+  return 1; 
+}
+
+int deleteVertex(struct Graph *g,TG id){
+#if defined(DIRECT)
+  //有向图
+  //删除边
+  //删除顶点
+#else
+  //无向图
+  struct GraphVertexNode *gVertex,*preGVertex;
+  struct GraphEdgeNode *gEdge,nextGEdge;
+
+  preGVertex=NULL;
+  gVertex=g->head;
+  while(gVertex!=NULL){
+    if(gVertex->vertex->id==id){
+      //删除边
+      gEdge=gVertex->graphEdge;
+      while(gEdge){
+        nextGEdge=gEdge->nextGEdge;
+        
+        deleteGraphEdge(g,gEdge->edge->vertex1->id,gEdge->edge->vertex2->id);
+        
+        gEdge=nextGEdge;
+      }
+      //删除顶点
+      if(preGVertex==NULL){
+        g->head=gVertex->nextGraphVertex;
+      }else{
+        preGVertex->nextGraphVertex=gVertex->nextGraphVertex;
+      }
+      free(gVertex);
+    }
+    preGVertex=gVertex;
+    gVertex=gVertex->nextVertex;
+  }
+#endif
+}
+
+struct Vertex *getVertex(struct Graph *g,TG id){
+  struct GraphVertexNode *gVertex=getGraphVertexNode(g,id);
+
+  return gVertex==NULL?NULL:gVertex->vertex;
+}
+
+int addEdge(struct Graph *g,TG id1,TG id2){
+#if defined(DIRECT)
+#else
+  //无向图
+  struct GraphVertexNode *gVertex1=getGraphVertexNode(g,id1);
+  struct GraphVertexNode *gVertex2=getGraphVertexNode(g,id2);
+  struct GraphEdgeNode *gEdge;
+  struct Edge *edge;
+  
+  if(gVertex1==NULL || gVertex2==NULL){
+    return 0;
+  }
+  if((gEdge=getGraphEdgeNode(g,id1,id2))!=NULL){
+    return 1;
+  }
+
+  edge=(struct Edge *)malloc(sizeof(struct Edge));
+  edge->vertex1
+      gEdge=(struct GraphEdgeNode*)malloc(sizeof(struct GraphEdgeNode));
+  if(gEdge==NULL){
+    return 0;
+  }
+  
+  edge->vertex1=vertex1;
+  edge->vertex2=vertex2;
+  edge->edge=vertex1->edge;
+  vertex1->edge=edge;
+
+  edge=(struct edgeNode*)malloc(sizeof(struct edgeNode));
+  if(edge==NULL){
+    return 0;
+  }
+  edge->vertex1=vertex2;
+  edge->vertex2=vertex1;
+  edge->edge=vertex2->edge;
+  vertex2->edge=edge;
+
+  return 1;
+#endif
+}
+
+int deleteGraphEdge(struct Graph *g,TG id1,TG id2){
+#if defined(DIRECT)
+#else
+  struct vertexNode *vertex1=getGraphVertex(g,id1);
+  struct vertexNode *vertex2=getGraphVertex(g,id2);
+  if(vertex1==NULL || vertex2==NULL){
+    return 1;
+  }
+
+  struct edgeNode preedge,edge;
+
+  preedge=NULL;
+  edge=vertex1->edge;
+  while(edge){
+    if(edge->vertex2==vertex2 /*|| edge->vertex1==vertex2*/){
+      if(preedge==NULL){
+        vertex1->edge=edge->nextEdge;
+      }else{
+        preedge->nextEdge=edge->nextEdge;
+      }
+      free(edge);
+      break;
+    }
+    edge=edge->nextEdge;
+  }
+
+  preedge=NULL;
+  edge=vertex2->edge;
+  while(edge){
+    if(edge->vertex2==vertex1 /*|| edge->vertex1==vertex1*/){
+      if(preedge==NULL){
+        vertex2->edge=edge->next;
+      }else{
+        preedge->next=edge->next;
+      }
+      free(edge);
+      break;
+    }
+    edge=edge->nextEdge;
+  }
+  return 1;
+#endif
+}
+
+struct edgeNode *getGraphEdge(struct Graph *g,TG id1,TG id2){
+#if defined(DIRECT)
+#else
+  struct vertexNode *vertex1=getGraphVertex(g,id1);
+  struct vertexNode *vertex2=getGraphVertex(g,id2);
+  if(vertex1==NULL || vertex2==NULL){
+    return NULL;
+  }
+
+  struct edgeNode *edge=vertex1->edge;
+  while(edge){
+    if((edge->vertex2==vertex2 /*|| edge->vertex1==vertex1*/)
+       /*|| (edge->vertex1==vertex1 && edge->vertex2==vertex2)*/){
+      return edge;
+    }
+    edge=edge->next;
+  }
+  return NULL;
+#endif
+}
+
+void releaseGraph(struct Graph *g){
+  if(g!=NULL){
+    struct vertexNode *vertex;
+    struct edgeNode *edge;
+
+    vertex=g->head;
+    while(vertex){
+      //删除点的对应边
+      edge=vertex->edge;
+      while(edge){
+        vertex->edge=edge->nextEdge;
+        free(edge);
+        edge=vertex->edge;
+      }
+      
+      //删除点
+      g->head=vertex->nextVertex;
+      free(vertex);
+
+      vertex=g->head;
+    }
+
+    g->head=NULL;
+  }
+}
+
+static struct GraphVertexNode *getGraphVertexNode(struct Graph *g,TG id){
+  struct GraphVertexNode *gVertex=g->head;
+
+  while(gVertex!=NULL){
+    if(gVertex->vertex->id==id){
+      return gVertex;
+    }
+    gVertex=gVertex->nextGraphVertex;
+  }
+
+  return NULL;
+}
+
+static struct GraphEdgeNode *getGraphEdgeNode(structGraph *g, TG id1,TG id2){
+  
+}

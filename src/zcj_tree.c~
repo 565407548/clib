@@ -1,0 +1,116 @@
+#include<stdlib.h>
+#include<stdio.h>
+
+#include"zcj_tree.h"
+#include"zcj_queue.h"
+
+void initTree(struct tree *at){
+  at->root=NULL;
+}
+
+struct treeNode *findTreeNode(struct tree *at,T v){
+  struct treeNode * pnode;
+  struct queue q;
+
+  initQueue(&q);
+  
+  if(at->root!=NULL){
+    enqueue(&q,at->root);
+  }
+
+  while(dequeue(&q,&pnode)){
+    if(pnode->value==v){
+      return pnode;
+    }
+    if(pnode->left){
+      enqueue(&q,pnode->left);
+    }
+    if(pnode->right){
+      enqueue(&q,pnode->right);
+    }
+  }
+  return NULL;
+}
+
+int insertTreeNode(struct tree *at,T parent,int lr,T child){
+  struct treeNode *pnode;
+  struct treeNode *cnode;
+
+  cnode=(struct treeNode*)malloc(sizeof(struct treeNode));
+  if(cnode==NULL){
+    return 0;
+  }
+  cnode->value=child;
+  cnode->left=NULL;
+  cnode->right=NULL;
+
+  //空树
+  if(at->root==NULL){
+    at->root=cnode;
+    return 1;
+  }
+  
+  pnode=findTreeNode(at,parent);
+  if(pnode==NULL){
+    return 0;
+  }
+
+  if(lr==LEFTCHILD && pnode->left==NULL){
+    pnode->left=cnode;
+    return 1;
+  }
+  else if(lr==RIGHTCHILD && pnode->right==NULL){
+    pnode->right=cnode;
+    return 1;
+  }else{
+    return 0;
+  }
+}
+
+void breadthFirstTraversal(struct tree *at){
+  struct treeNode * pnode;
+  struct queue q;
+
+  initQueue(&q);
+  
+  if(at->root!=NULL){
+    enqueue(&q,at->root);
+  }
+
+  while(dequeue(&q,&pnode)){
+    printf("%d ",pnode->value);
+    if(pnode->left){
+      enqueue(&q,pnode->left);
+    }
+    if(pnode->right){
+      enqueue(&q,pnode->right);
+    }
+  }
+}
+
+void depthFirstTraversal(struct tree *at,int type){
+  
+}
+
+void releaseTree(struct tree *at){
+  struct treeNode * pnode;
+  struct queue q;
+
+  initQueue(&q);
+  
+  if(at->root!=NULL){
+    enqueue(&q,at->root);
+  }
+
+  while(dequeue(&q,&pnode)){
+    if(pnode->left){
+      enqueue(&q,pnode->left);
+    }
+    if(pnode->right){
+      enqueue(&q,pnode->right);
+    }
+    free(pnode);
+  }
+  
+  at->root=NULL;
+}

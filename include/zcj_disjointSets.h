@@ -1,19 +1,65 @@
-#define SETS_CAPCITY 100
-#define T int
+#ifndef _ZCJ_DISJOINTSETS_H_
+#define _ZCJ_DISJOINTSETS_H_
 
+/*
+使用不交集时，需要先根据需求，重新定义的东西：
+struct node_type
+T
+TID
+
+还需要定义:
+TID getNodeID(T t);//返回节点标识（注意：不是节点所在集合的标识）
+int node_compare(const TID t1,const TID t2);//根据节点标识进行比较
+这方面有待优化，如何可以动态指定呢？
+ */
+struct node_type{
+  int id;
+  char desc[10];
+};
+#define T struct node_type
+#define TID int
+
+
+#ifndef MAX
+#define MAX(a,b) ((a>b)?(a):(b))
+#endif
+
+#ifndef MIN
+#define MIN(a,b) ((a<b)?(a):(b))
+#endif
+#define CAPACITY 100
+
+//不交集中的节点
 struct ds_node{
   T elem;
   struct ds_node *next;
-  struct ds_node *id;
+  int headID;
 };
-
+//不交集集合头部，所有相交的节点共用一个头部
 struct ds_head{
   int len;
   struct ds_node *node;
 };
 
-void initSet(int sets_len);
-void makeSet(T t);
-struct ds_node findSet(T t);
-int sameSet(T t1,T t2);
-void unionSet(T t1,T t2);
+struct disjointSet{
+   int capacity;
+   int len;
+   struct ds_head *heads;
+   struct ds_node **tails;
+   int (*node_compare)(const TID , const TID);
+   TID (*getNodeID)(T t);
+};
+
+void initSet(struct disjointSet *ds,int capcity,TID (*getNodeID)(T t),int (*node_compare)(const TID, const TID));
+//根据指定节点创建一个新不交集，返回不交集的标识（区别于节点标识）
+int newSet(struct disjointSet *ds,T t);
+struct ds_node *findSetNode(struct disjointSet *ds,TID tid);
+int sameSet(struct disjointSet *ds,TID tid1,TID tid2);
+int unionSet(struct disjointSet *ds,TID tid1,TID tid2);
+int default_node_compare(const TID t1,const TID t2);
+
+void releaseSets(struct disjointSet *ds);
+
+#endif /* _ZCJ_DISJOINTSETS_H_ */
+
+
